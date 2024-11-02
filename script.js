@@ -40,14 +40,23 @@ document.getElementById('donorForm').addEventListener('submit', async (e) => {
         organs: formData.getAll('organs')
     };
 
+    console.log('Submitting data:', data);
+
     try {
-        const response = await fetch('http://localhost:5000/api/donors/register', {
+        const response = await fetch('http://localhost:5500/api/donors/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Server error:', errorData);
+            alert(`Registration failed: ${errorData.message || 'Unknown error'}`);
+            return;
+        }
 
         const result = await response.json();
         
